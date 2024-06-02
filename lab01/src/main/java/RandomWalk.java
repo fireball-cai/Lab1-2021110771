@@ -6,24 +6,25 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-public class RandomWalk{
+public class RandomWalk {
     // ¼ÇÂ¼±éÀúÂ·¾¶µÄ½Úµã  
     public List<String> walkPath = new ArrayList<>();
     private int[][] isVisited;
     private TuPojo tuPojo1;
     private int currentNode;
 
-    public RandomWalk(TuPojo tuPojo){
+    public RandomWalk(TuPojo tuPojo) {
         this.tuPojo1 = tuPojo;
         isVisited = new int[tuPojo1.numVertices][tuPojo1.numVertices];
         for (int i = 0; i < tuPojo1.numVertices; i++) {
             for (int j = 0; j < tuPojo1.numVertices; j++) {
-                isVisited[i][j]=0;
+                isVisited[i][j] = 0;
             }
         }
         currentNode = getRandomStartNode();
         walkPath.add(tuPojo1.wordIndex2Map.get(currentNode));
     }
+
     // Ëæ»úÑ¡ÔñÒ»¸öÆðÊ¼½Úµã
     private int getRandomStartNode() {
         Random rand = new Random();
@@ -47,30 +48,30 @@ public class RandomWalk{
 
     // Ö´ÐÐËæ»úÓÎ×ß  
     public String performRandomWalk() {
-            List<Integer> outgoingEdges = new ArrayList<>();
-            for (int i = 0; i < tuPojo1.numVertices; i++) {
-                if (tuPojo1.adjMatrix[currentNode][i] != 0) {
-                    outgoingEdges.add(i);
-                }
+        List<Integer> outgoingEdges = new ArrayList<>();
+        for (int i = 0; i < tuPojo1.numVertices; i++) {
+            if (tuPojo1.adjMatrix[currentNode][i] != 0) {
+                outgoingEdges.add(i);
             }
-            // ¼ì²éÊÇ·ñÓÐ³ö±ß
-            if (outgoingEdges.isEmpty()) {
-                return "µ±Ç°½Úµã²»´æÔÚ³ö±ß";
-            }
-            // Ëæ»úÑ¡ÔñÒ»¸ö³ö±ß  
-            Random rand = new Random();
-            int nextNode = outgoingEdges.get(rand.nextInt(outgoingEdges.size()));
+        }
+        // ¼ì²éÊÇ·ñÓÐ³ö±ß
+        if (outgoingEdges.isEmpty()) {
+            return "µ±Ç°½Úµã²»´æÔÚ³ö±ß";
+        }
+        // Ëæ»úÑ¡ÔñÒ»¸ö³ö±ß
+        Random rand = new Random();
+        int nextNode = outgoingEdges.get(rand.nextInt(outgoingEdges.size()));
 
-            // Èç¹ûÖØ¸´·ÃÎÊ±ß£¬Ôò·µ»Ønull
-            if (isVisited[currentNode][nextNode] == 1){
-                return "ÖØ¸´·ÃÎÊ±ß";
-            }
+        // Èç¹ûÖØ¸´·ÃÎÊ±ß£¬Ôò·µ»Ønull
+        if (isVisited[currentNode][nextNode] == 1) {
+            return "ÖØ¸´·ÃÎÊ±ß";
+        }
 
-            // ÒÆ¶¯µ½ÏÂÒ»¸ö½Úµã
-            isVisited[currentNode][nextNode] = 1;
-            currentNode = nextNode;
-            walkPath.add(tuPojo1.wordIndex2Map.get(currentNode));
-            return "success";
+        // ÒÆ¶¯µ½ÏÂÒ»¸ö½Úµã
+        isVisited[currentNode][nextNode] = 1;
+        currentNode = nextNode;
+        walkPath.add(tuPojo1.wordIndex2Map.get(currentNode));
+        return "success";
     }
 
     // ½«±éÀúÂ·¾¶Ð´ÈëÎÄ¼þ  
@@ -91,4 +92,4 @@ public class RandomWalk{
         }
     }
 
-}[C[D//test content
+}

@@ -12,11 +12,26 @@ public class FindBridegwords {
 
         word1=word1.toLowerCase();
         word2=word2.toLowerCase();
+        int flag=0;
         //初始化桥接词数组
         List<String> list = new ArrayList<>();
 
         if(!tuPojo.wordIndexMap.containsKey(word1) || !tuPojo.wordIndexMap.containsKey(word2)){
-            list.add("False");
+            if(!tuPojo.wordIndexMap.containsKey(word1)){
+                list.add("False");
+                list.add("False1");
+                flag=1;
+            }
+            if(!tuPojo.wordIndexMap.containsKey(word2)){
+                if (flag==1){
+                    list.remove(1);
+                    list.add("False12");
+                }
+                else {
+                    list.add("False");
+                    list.add("False2");
+                }
+            }
         } else{
             Integer index1 = tuPojo.wordIndexMap.get(word1);
             Integer index2 = tuPojo.wordIndexMap.get(word2);
@@ -31,5 +46,6 @@ public class FindBridegwords {
             }
         }
         return list;
+
     }
 }

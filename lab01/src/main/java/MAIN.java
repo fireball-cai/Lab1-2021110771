@@ -11,7 +11,7 @@ public class MAIN {
     private RandomWalk performRandomWalk;
     private DotGraphBuilder dotGraphBuilder=new DotGraphBuilder();
     private MAIN() {
-        String Path="data.txt";
+        String Path="data4.txt";
         readMytxt readmytxt = new readMytxt(Path);
         tuPojo = new TuPojo();
         tuPojo.buildGraphFromString(readmytxt.s);
@@ -97,6 +97,11 @@ public class MAIN {
                 case "2":
                     Scanner scanner1 = new Scanner(System.in);
                     System.out.println("请输入想查找的桥接词");
+                    System.out.println("可以选择的单词列表如下:");
+                    for (Map.Entry<Integer,String> entry : main.tuPojo.wordIndex2Map.entrySet()) {
+                        System.out.print(entry.getValue() + ",");
+                    }
+                    System.out.println();
                     String word1 = scanner1.next();
                     String word2 = scanner1.next();
                     StringBuilder result= new StringBuilder();
@@ -112,10 +117,18 @@ public class MAIN {
                                 .append(word1).append("\" ").append("to \"")
                                 .append(word2).append("\" ").append("is:").append(BridgeWords.get(0));
                         System.out.println(result.toString());
-                    }else if (BridgeWords.size()==1 && BridgeWords.get(0)=="False"){
-                        result.append("No").append(" \"")
-                                .append(word1).append("\" ").append("or \"")
-                                .append(word2).append("\" ").append("in the graph!");
+                    }else if (BridgeWords.size()==2 && BridgeWords.get(0)=="False"){
+                        if (BridgeWords.get(1)=="False1"){
+                            result.append("No").append(" \"")
+                                    .append(word1).append("\" ").append("in the graph!");
+                        }else if(BridgeWords.get(1)=="False2"){
+                            result.append("No").append(" \"")
+                                    .append(word2).append("\" ").append("in the graph!");
+                        } else if (BridgeWords.get(1)=="False12") {
+                            result.append("No").append(" \"")
+                                    .append(word1).append("\" ").append("and").append(" \"")
+                                    .append(word2).append("\" ").append("in the graph!");
+                        }
                         System.out.println(result.toString());
                     }else if (BridgeWords.size()>1){
                         result.append("The bridge words from").append(" \"").append(word1).append("\" ").append("to \"")

@@ -81,7 +81,7 @@ public class ShortestPath {
         else {
             int endPoint = tuPojo.wordIndexMap.get(word2);
             if (!visited[endPoint]) {
-                return "单词" + tuPojo.wordIndex2Map.get(sourcePoint) + "到单词" + tuPojo.wordIndex2Map.get(endPoint) + "的最短路径为:两个单词不可达";
+                return "单词" + tuPojo.wordIndex2Map.get(sourcePoint) + "到单词" + tuPojo.wordIndex2Map.get(endPoint) + "的最短路径为:两个单词不可达\n";
             } else {
                 ArrayList<String> shortestPath = new ArrayList<>();
                 int tempVertex = endPoint;
@@ -122,23 +122,6 @@ public class ShortestPath {
                     DotGraphBuilder dotGraphBuilder = new DotGraphBuilder();
                     //1.构建dot文件
                     String dotFormat = new String();
-                    int[][] tempAdjMatrix = new int[tuPojo.numVertices][tuPojo.numVertices];
-                    for (int j = 0; j < tuPojo.numVertices; j++) {
-                        for (int k = 0; k < tuPojo.numVertices; k++) {
-                            tempAdjMatrix[j][k] = tuPojo.adjMatrix[j][k];
-                        }
-                    }
-                    for (int j = shortestPath.size() - 1; j > 0; j--) {
-                        int temp1 = tuPojo.wordIndexMap.get(shortestPath.get(j));
-                        int temp2 = tuPojo.wordIndexMap.get(shortestPath.get(j - 1));
-                        String node1 = String.valueOf(temp1);
-                        String node2 = String.valueOf(temp2);
-                        String edge = String.valueOf(tuPojo.adjMatrix[temp1][temp2]);
-                        dotGraphBuilder.addNode(node1, tuPojo.wordIndex2Map.get(temp1), "red");
-                        dotGraphBuilder.addNode(node2, tuPojo.wordIndex2Map.get(temp2), "red");
-                        dotGraphBuilder.addEdge(node1, node2, edge, "red");
-                        tuPojo.adjMatrix[temp1][temp2] = -1;
-                    }
                     for (int j = 0; j < tuPojo.wordIndexMap.size(); j++) {
                         for (int k = 0; k < tuPojo.wordIndexMap.size(); k++) {
                             if (tuPojo.adjMatrix[j][k] > 0) {
@@ -155,16 +138,20 @@ public class ShortestPath {
                                 } else {
                                     dotGraphBuilder.addNode(node2, tuPojo.wordIndex2Map.get(k), "darkgreen");
                                 }
-                                dotGraphBuilder.addEdge(node1, node2, edge, "darkgreen");
+                                if(shortestPath.contains(tuPojo.wordIndex2Map.get(j)) && shortestPath.contains(tuPojo.wordIndex2Map.get(k)) && shortestPath.indexOf(tuPojo.wordIndex2Map.get(j))>shortestPath.indexOf(tuPojo.wordIndex2Map.get(k))){
+                                    dotGraphBuilder.addEdge(node1,node2,edge,"red");
+                                }
+                                else{
+                                    dotGraphBuilder.addEdge(node1,node2,edge,"darkgreen");
+                                }
                             }
                         }
                     }
+                    String s = String.valueOf(minDistance[i]);
+                    s="mindistanse:"+s;
+                    dotGraphBuilder.addNode(String.valueOf(tuPojo.wordIndex2Map.size()), s, "red");
                     dotFormat = dotGraphBuilder.build();
-                    for (int j = 0; j < tuPojo.numVertices; j++) {
-                        for (int k = 0; k < tuPojo.numVertices; k++) {
-                            tuPojo.adjMatrix[j][k] = tempAdjMatrix[j][k];
-                        }
-                    }
+
                     //2.进行绘图
                     Graphviz gv = new Graphviz();
                     gv.addln(gv.start_graph());
@@ -185,7 +172,7 @@ public class ShortestPath {
                     else {
                         // 如果文件夹存在，则检查是否包含文件并清空它
                         File[] files = folder.listFiles();
-                        if (files != null) {
+                        if (files != null && (i == 0 || (i == 1 && sourcePoint == 0))) {
                             for (File file : files) {
                                 if (!file.isDirectory()) { // 只删除文件，不删除子文件夹
                                     if (!file.delete()) {
@@ -222,17 +209,6 @@ public class ShortestPath {
                 DotGraphBuilder dotGraphBuilder=new DotGraphBuilder();
                 //1.构建dot文件
                 String dotFormat = new String();
-                for(int i = shortestPath.size() - 1; i > 0; i--){
-                    int temp1 = tuPojo.wordIndexMap.get(shortestPath.get(i));
-                    int temp2 = tuPojo.wordIndexMap.get(shortestPath.get(i-1));
-                    String node1 = String.valueOf(temp1);
-                    String node2 = String.valueOf(temp2);
-                    String edge = String.valueOf(tuPojo.adjMatrix[temp1][temp2]);
-                    dotGraphBuilder.addNode(node1,tuPojo.wordIndex2Map.get(temp1),"red");
-                    dotGraphBuilder.addNode(node2,tuPojo.wordIndex2Map.get(temp2),"red");
-                    dotGraphBuilder.addEdge(node1,node2,edge,"red");
-                    tuPojo.adjMatrix[temp1][temp2] = -1;
-                }
                 for (int i = 0; i <tuPojo.wordIndexMap.size(); i++) {
                     for (int j = 0; j < tuPojo.wordIndexMap.size(); j++) {
                         if(tuPojo.adjMatrix[i][j]>0) {
@@ -251,10 +227,18 @@ public class ShortestPath {
                             else{
                                 dotGraphBuilder.addNode(node2,tuPojo.wordIndex2Map.get(j),"darkgreen");
                             }
-                            dotGraphBuilder.addEdge(node1,node2,edge,"darkgreen");
+                            if(shortestPath.contains(tuPojo.wordIndex2Map.get(i)) && shortestPath.contains(tuPojo.wordIndex2Map.get(j)) && shortestPath.indexOf(tuPojo.wordIndex2Map.get(i))>shortestPath.indexOf(tuPojo.wordIndex2Map.get(j))){
+                                dotGraphBuilder.addEdge(node1,node2,edge,"red");
+                            }
+                            else{
+                                dotGraphBuilder.addEdge(node1,node2,edge,"darkgreen");
+                            }
                         }
                     }
                 }
+                String s = String.valueOf(minDistance[endPoint]);
+                s="mindistanse:"+s;
+                dotGraphBuilder.addNode(String.valueOf(tuPojo.wordIndex2Map.size()), s, "red");
                 dotFormat=dotGraphBuilder.build();
 
                 //2.进行绘图
