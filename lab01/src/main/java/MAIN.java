@@ -11,7 +11,7 @@ public class MAIN {
     private RandomWalk performRandomWalk;
     private DotGraphBuilder dotGraphBuilder=new DotGraphBuilder();
     private MAIN() {
-        String Path="data4.txt";
+        String Path="data.txt";
         readMytxt readmytxt = new readMytxt(Path);
         tuPojo = new TuPojo();
         tuPojo.buildGraphFromString(readmytxt.s);
